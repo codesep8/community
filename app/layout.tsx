@@ -1,16 +1,15 @@
 import type { Metadata } from "next";
-import localFont from "next/font/local";
+import { ThemeProvider } from "@/components/providers/theme";
 import "./globals.css";
+import { IBM_Plex_Sans_KR } from "next/font/google";
+import { Navbar } from "@/components/layouts/navbar";
+import { Banner } from "@/components/layouts/banner";
+import { ThemeToggle } from "@/components/layouts/themetoggle";
 
-const geistSans = localFont({
-  src: "./fonts/GeistVF.woff",
-  variable: "--font-geist-sans",
-  weight: "100 900",
-});
-const geistMono = localFont({
-  src: "./fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
-  weight: "100 900",
+const IBMPlexSansKR = IBM_Plex_Sans_KR({
+  weight: ["500", "600"],
+  subsets: ["latin"],
+  display: "swap"
 });
 
 export const metadata: Metadata = {
@@ -26,9 +25,19 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {children}
+        className={IBMPlexSansKR.className} suppressHydrationWarning={true}>
+        <ThemeProvider attribute="class" defaultTheme="system" disableTransitionOnChange>
+          <header className="flex flex-wrap sm:justify-start sm:flex-nowrap w-full bg-zinc-200 text-sm py-3 dark:bg-zinc-800">
+            <Navbar />
+          </header>
+          <div className="m-2">
+          <Banner />
+          </div>
+          <main className="m-3">
+            {children}
+          </main>
+          <ThemeToggle />
+        </ThemeProvider>
       </body>
     </html>
   );
